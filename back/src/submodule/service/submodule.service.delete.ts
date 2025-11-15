@@ -10,10 +10,12 @@ export class SubmoduleServiceDelete {
     private submoduleRepository: Repository<SubmoduleEntity>,
   ) {}
 
-  async remove(id: number): Promise<void> {
-    const result = await this.submoduleRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Submódulo com ID ${id} não encontrado.`);
+  async remove(submoduleId: number): Promise<void> {
+    const deleteResult = await this.submoduleRepository.delete(submoduleId);
+    
+    // Checa se algo foi realmente deletado
+    if (deleteResult.affected === 0) {
+      throw new NotFoundException(`Submódulo com ID ${submoduleId} não existe ou já foi deletado.`);
     }
   }
 }

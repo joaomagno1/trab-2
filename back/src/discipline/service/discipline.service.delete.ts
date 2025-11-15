@@ -10,11 +10,12 @@ export class DisciplineServiceDelete {
   ){}
 
   async delete(disciplineId: number) {
-    const disciplineToDelete = await this.disciplineRepository.findOne({
+    // Diferente do outro delete, esse busca o objeto antes.
+    const disciplineToRemove = await this.disciplineRepository.findOne({
       where: { disciplineId: disciplineId },
     });
 
-    if (!disciplineToDelete) {
+    if (!disciplineToRemove) {
       throw new HttpException(
         `Disciplina com ID ${disciplineId} não encontrada`,
         HttpStatus.NOT_FOUND,

@@ -15,17 +15,17 @@ export class ModuleControllerCreate {
   @HttpCode(HttpStatus.CREATED)
   @Post(ROUTE.MODULES.CREATE)
   async create(
-    @Req() req: Request,
-    @Body() moduleRequest: ModuleRequestDto
+    @Req() request: Request,
+    @Body() createDto: ModuleRequestDto
   ): Promise<Result<ModuleResponseDto>> {
-    const moduleEntity = await this.moduleServiceCreate.create(moduleRequest);
-    const responseDto = ModuleConverterDto.toModuleResponse(moduleEntity);
+    const savedModule = await this.moduleServiceCreate.create(createDto);
+    const data = ModuleConverterDto.toModuleResponse(savedModule);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.CREATED,
       'Módulo cadastrado com sucesso!',
-      responseDto,
-      req.path,
+      data,
+      request.path,
       null
     )
   }

@@ -24,6 +24,10 @@ export default function Layout() {
           </div>
         </header>
         <main>
+          {/*         O <Outlet> é a parte mais legal do react-router-dom.
+            Esse Layout é o "pai" e o Outlet é onde o router vai
+            renderizar as rotas "filhas" (List, Create, Update...).
+          */}
           <Outlet />
         </main>
       </div>

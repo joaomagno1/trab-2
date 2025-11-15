@@ -3,13 +3,15 @@ import { DISCIPLINE } from "../discipline/constants/discipline.constants";
 const SYSTEM_ROUTE = "system";
 export const DASHBOARD = `/${SYSTEM_ROUTE}/dashboard`;
 
+// Constantes para as rotas do front-end
 const FE_LIST = `list`;
 const FE_CREATE = "create";
 const FE_BY_ID = `view`;
 const FE_UPDATE = `update`;
 const FE_DELETE = `delete`;
 
-function generateFrontendRoute(entity: string) {
+// Helper pra rotas do Front
+function buildAppRoutes(entity: string) {
   const base = `${SYSTEM_ROUTE}/${entity}`;
   return {
     LIST: `/${base}/${FE_LIST}`,
@@ -20,13 +22,16 @@ function generateFrontendRoute(entity: string) {
   };
 }
 
+// Rotas do React Router
 export const ROUTES = {
-  DISCIPLINE: generateFrontendRoute(DISCIPLINE.ALIAS),
+  DISCIPLINE: buildAppRoutes(DISCIPLINE.ALIAS),
 };
 
+// Rotas da API (o que o Axios vai chamar)
+// Mudei de API_ROUTES para API
 const API_BASE_PATH = `/${DISCIPLINE.ALIAS}`;
 
-export const API_ROUTES = {
+export const API = {
   DISCIPLINE: {
     LIST: `${API_BASE_PATH}/list`,
     CREATE: API_BASE_PATH,

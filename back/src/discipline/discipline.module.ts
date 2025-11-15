@@ -10,6 +10,9 @@ import { DisciplineServiceDelete } from './service/discipline.service.delete';
 import { DisciplineServiceUpdate } from './service/discipline.service.update';
 import { DisciplineControllerUpdate } from './controller/discipline.controller.update';
 
+// Esse módulo aqui já não segue o padrão "fatiado" 100%.
+// Os controllers estão separados, mas os services não.
+// Mantive o padrão que o coção passou.
 const disciplineControllers = [
   DisciplineControllerCreate,
   DisciplineControllerFindAll,

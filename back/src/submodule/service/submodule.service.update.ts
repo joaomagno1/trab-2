@@ -12,19 +12,21 @@ export class SubmoduleServiceUpdate {
     private submoduleRepository: Repository<SubmoduleEntity>,
   ) {}
 
-  async update(id: number, submoduleRequestDto: SubmoduleRequestDto): Promise<SubmoduleEntity> {
-    const submoduleToUpdate = SubmoduleConverterDto.toSubmoduleEntity(submoduleRequestDto);
+  async update(submoduleId: number, updateDto: SubmoduleRequestDto): Promise<SubmoduleEntity> {
+    const entityFromDto = SubmoduleConverterDto.toSubmoduleEntity(updateDto);
 
-    // The ID from the URL parameter is the source of truth.
-    // Assign it to the entity before preloading.
-    submoduleToUpdate.submoduleId = id;
+    // O ID da URL é a fonte da verdade
+    entityFromDto.submoduleId = submoduleId;
 
-    const submodule = await this.submoduleRepository.preload(submoduleToUpdate);
+    //     O preload é o jeito certo de fazer update no TypeORM.
+    // Ele primeiro busca a entidade pelo ID (submoduleId) e depois
+    // mescla os dados do (entityFromDto) por cima.
+    const existingSubmodule = await this.submoduleRepository.preload(entityFromDto);
 
-    if (!submodule) {
-      throw new NotFoundException(`Submódulo com ID ${id} não encontrado.`);
+    if (!existingSubmodule) {
+      throw new NotFoundException(`Submódulo com ID ${submoduleId} não encontrado para atualização.`);
     }
 
-    return this.submoduleRepository.save(submodule);
+    return this.submoduleRepository.save(existingSubmodule);
   }
 }

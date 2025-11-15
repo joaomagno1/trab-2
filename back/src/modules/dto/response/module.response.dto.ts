@@ -11,6 +11,7 @@ export class ModuleResponseDto {
   @Expose()
   description: string;
 
+  // Aninhando o DTO da Disciplina
   @Expose()
   @Type(() => DisciplineResponseDto)
   discipline: DisciplineResponseDto;

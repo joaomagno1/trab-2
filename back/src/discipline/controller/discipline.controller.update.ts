@@ -5,7 +5,7 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
-  Put,
+  Put, // Usando PUT em vez de PATCH
   Req,
 } from '@nestjs/common';
 import type { Request } from 'express';
@@ -21,19 +21,19 @@ export class DisciplineControllerUpdate {
   constructor(private readonly disciplineServiceUpdate: DisciplineServiceUpdate){}
 
   @HttpCode(HttpStatus.OK)
-  @Put(ROUTE.DISCIPLINE.UPDATE)
-  async create(
-    @Req() req: Request,
+  @Put(ROUTE.DISCIPLINE.UPDATE) // O professor usa PUT para "substituição total"
+  async update(
+    @Req() request: Request,
     @Param('disciplineId', ParseIntPipe) disciplineId: number,
-    @Body() disciplineRequest: DisciplineRequestDto
+    @Body() updateDto: DisciplineRequestDto
   ): Promise<Result<DisciplineResponseDto>> {
-    const response = await this.disciplineServiceUpdate.update(disciplineId, disciplineRequest);
+    const updatedDiscipline = await this.disciplineServiceUpdate.update(disciplineId, updateDto);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
       'Disciplina atualizada com sucesso!',
-      response,
-      req.path,
+      updatedDiscipline,
+      request.path,
       null
     )
   }

@@ -1,30 +1,36 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req } from "@nestjs/common";
+import { DisciplineServiceDelete } from '../service/discipline.service.delete';
+import {
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Req,
+} from '@nestjs/common';
+import { ROUTE } from '../../commons/constants/url.sistema';
+import { MessageSystem } from '../../commons/message/message.system';
 import type { Request } from 'express';
-import { DisciplineRequestDto } from "../dto/request/discipline.request.dto";
-import { ROUTE } from "src/commons/constants/url.sistema";
-import { DisciplineServiceCreate } from "../service/discipline.service.create";
-import { MessageSystem } from "src/commons/message/message.system";
-import { Result } from "src/commons/message/message";
-import { DisciplineResponseDto } from "../dto/response/discipline.response.dto";
+import { Result } from '../../commons/message/message';
 
 @Controller(ROUTE.DISCIPLINE.BASE)
-export class DisciplineControllerCreate {
-  constructor(private readonly disciplineServiceCreate: DisciplineServiceCreate){}
+export class DisciplineControllerDelete {
+  constructor(private readonly disciplineServiceDelete: DisciplineServiceDelete) {}
 
-  @HttpCode(HttpStatus.CREATED)
-  @Post(ROUTE.DISCIPLINE.CREATE)
-  async create(
-    @Req() req: Request,
-    @Body() disciplineRequest: DisciplineRequestDto
-  ): Promise<Result<DisciplineResponseDto>> {
-    const response = await this.disciplineServiceCreate.create(disciplineRequest);
+  @HttpCode(HttpStatus.OK)
+  @Delete(ROUTE.DISCIPLINE.DELETE)
+  async delete(
+    @Req() request: Request,
+    @Param('disciplineId', ParseIntPipe) disciplineId: number,
+  ): Promise<Result<void>> {
+    await this.disciplineServiceDelete.delete(disciplineId);
 
-    return MessageSystem.showMessage(
-      HttpStatus.CREATED,
-      'Disciplina cadastrada com sucesso!',
-      response,
-      req.path,
-      null
-    )
+    return MessageSystem.buildResponse(
+      HttpStatus.OK, // Status OK (200)
+      'Disciplina removida com sucesso!',
+      null,
+      request.path,
+      null,
+    );
   }
 }

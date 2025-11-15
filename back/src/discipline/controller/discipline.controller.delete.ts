@@ -17,19 +17,19 @@ import { Result } from '../../commons/message/message';
 export class DisciplineControllerDelete {
   constructor(private readonly disciplineServiceDelete: DisciplineServiceDelete) {}
 
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   @Delete(ROUTE.DISCIPLINE.DELETE)
   async delete(
-    @Req() req: Request,
+    @Req() request: Request,
     @Param('disciplineId', ParseIntPipe) disciplineId: number,
   ): Promise<Result<void>> {
-    const response = await this.disciplineServiceDelete.delete(disciplineId);
+    await this.disciplineServiceDelete.delete(disciplineId);
 
-    return MessageSystem.showMessage(
-      HttpStatus.NO_CONTENT,
+    return MessageSystem.buildResponse(
+      HttpStatus.OK, // Status OK (200)
       'Disciplina removida com sucesso!',
-      response,
-      req.path,
+      null,
+      request.path,
       null,
     );
   }

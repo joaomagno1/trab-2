@@ -4,26 +4,27 @@ import { DisciplineEntity } from 'src/discipline/entity/discipline.entity';
 import { DisciplineResponseDto } from '../response/discipline.response.dto';
 
 export class DisciplineConverterDto {
-  static toDiscipline(disciplineRequest: DisciplineRequestDto) {
-    const disciplineEntity = new DisciplineEntity();
+  
+  static toDisciplineEntity(dto: DisciplineRequestDto) {
+    const newEntity = new DisciplineEntity();
 
-    if (disciplineRequest.disciplineId != null) {
-      disciplineEntity.disciplineId = disciplineRequest.disciplineId;
+    if (dto.disciplineId != null) {
+      newEntity.disciplineId = dto.disciplineId;
     }
-    disciplineEntity.name = disciplineRequest.name;
-    disciplineEntity.description = disciplineRequest.description;
+    newEntity.name = dto.name;
+    newEntity.description = dto.description;
 
-    return disciplineEntity;
+    return newEntity;
   }
 
-  static toDisciplineResponse(disciplines: DisciplineEntity): DisciplineResponseDto {
-    return plainToInstance(DisciplineResponseDto, disciplines, {
+  static toDisciplineResponse(entity: DisciplineEntity): DisciplineResponseDto {
+    return plainToInstance(DisciplineResponseDto, entity, {
       excludeExtraneousValues: true,
     });
   }
 
-  static toListDisciplineResponse(disciplines: DisciplineEntity[] = []): DisciplineResponseDto[] {
-    return plainToInstance(DisciplineResponseDto, disciplines, {
+  static toListDisciplineResponse(entities: DisciplineEntity[] = []): DisciplineResponseDto[] {
+    return plainToInstance(DisciplineResponseDto, entities, {
       excludeExtraneousValues: true,
     });
   }

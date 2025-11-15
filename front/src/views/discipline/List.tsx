@@ -5,10 +5,10 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { apiGetDisciplines } from "../../services/discipline/api/api.discipline";
 import { DISCIPLINE } from "../../services/discipline/constants/discipline.constants";
-import type { Discipline } from "../../services/discipline/type/Discipline";
+import type { IDiscipline } from "../../services/discipline/type/Discipline";
 import { ROUTES } from "../../services/router/url";
 
-const fetchAllDisciplines = async (): Promise<Discipline[] | null> => {
+const loadDisciplines = async (): Promise<IDiscipline[] | null> => {
   try {
     const response = await apiGetDisciplines();
     return response.data.data;
@@ -19,16 +19,16 @@ const fetchAllDisciplines = async (): Promise<Discipline[] | null> => {
 };
 
 export default function ListDiscipline() {
-  const [models, setModels] = useState<Discipline[] | null>(null);
+  const [disciplines, setDisciplines] = useState<IDiscipline[] | null>(null);
 
   useEffect(() => {
-    async function getDisciplines() {
-      const disciplines = await fetchAllDisciplines();
-      if (disciplines) {
-        setModels(disciplines);
+    async function fetchData() {
+      const allDisciplines = await loadDisciplines();
+      if (allDisciplines) {
+        setDisciplines(allDisciplines);
       }
     }
-    getDisciplines();
+    fetchData();
   }, []);
 
   return (
@@ -42,6 +42,10 @@ export default function ListDiscipline() {
           }}
         >
           <h2>{DISCIPLINE.TITLE.LIST}</h2>
+          {/* O <Link> do react-router-dom é o que
+              faz a navegação de SPA (sem recarregar a página)
+              funcionar. Ele troca o componente no <Outlet>.
+          */}
           <Link to={ROUTES.DISCIPLINE.CREATE} className="btn btn-add">
             <span className="btn-icon">
               <i>
@@ -63,13 +67,13 @@ export default function ListDiscipline() {
             </tr>
           </thead>
           <tbody>
-            {models?.map((model) => (
-              <tr key={model.id}>
-                <td>{model.name}</td>
-                <td>{model.description}</td>
+            {disciplines?.map((item) => (
+              <tr key={item.id}>
+                <td>{item.name}</td>
+                <td>{item.description}</td>
                 <td className="center actions">
                   <Link
-                    to={`${ROUTES.DISCIPLINE.UPDATE}/${model.id}`}
+                    to={`${ROUTES.DISCIPLINE.UPDATE}/${item.id}`}
                     className="btn btn-edit"
                   >
                     <span className="btn-icon">
@@ -80,7 +84,7 @@ export default function ListDiscipline() {
                     Atualizar
                   </Link>
                   <Link
-                    to={`${ROUTES.DISCIPLINE.DELETE}/${model.id}`}
+                    to={`${ROUTES.DISCIPLINE.DELETE}/${item.id}`}
                     className="btn btn-delete"
                   >
                     <span className="btn-icon">
@@ -91,7 +95,7 @@ export default function ListDiscipline() {
                     Excluir
                   </Link>
                   <Link
-                    to={`${ROUTES.DISCIPLINE.BY_ID}/${model.id}`}
+                    to={`${ROUTES.DISCIPLINE.BY_ID}/${item.id}`}
                     className="btn btn-info"
                   >
                     <span className="btn-icon">

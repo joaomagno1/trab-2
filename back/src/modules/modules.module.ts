@@ -12,6 +12,7 @@ import { ModuleServiceUpdate } from './service/module.service.update';
 import { ModuleControllerDelete } from './controller/module.controller.delete';
 import { ModuleServiceDelete } from './service/module.service.delete';
 
+// Juntando todos os controllers e services do módulo
 const moduleControllers = [
   ModuleControllerCreate,
   ModuleControllerFindAll,

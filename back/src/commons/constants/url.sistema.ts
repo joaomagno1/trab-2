@@ -10,20 +10,22 @@ const LIST   = 'list';
 const DELETE = 'delete';
 const UPDATE = 'update';
 
-function buildRoutes(entity: string, idParam: string) {
+// Função helper pra criar as rotas CRUD
+function createApiRoutes(entity: string, paramName: string) {
   const base = `/${API}/${entity}`;
   return {
     BASE: base,
     CREATE: `/${CREATE}`,
     LIST: `/${LIST}`,
-    DELETE: `/${DELETE}/:${idParam}`,
-    UPDATE: `/${UPDATE}/:${idParam}`,
-    FIND_ONE: `/:${idParam}`,
+    DELETE: `/${DELETE}/:${paramName}`,
+    UPDATE: `/${UPDATE}/:${paramName}`,
+    FIND_ONE: `/:${paramName}`,
   };
 }
 
+// Objeto global de rotas da API
 export const ROUTE = {
-  DISCIPLINE: buildRoutes(DISCIPLINE, 'disciplineId'),
-  MODULES: buildRoutes(MODULES, 'moduleId'),
-  SUBMODULES: buildRoutes(SUBMODULES, 'submoduleId'),
+  DISCIPLINE: createApiRoutes(DISCIPLINE, 'disciplineId'),
+  MODULES: createApiRoutes(MODULES, 'moduleId'),
+  SUBMODULES: createApiRoutes(SUBMODULES, 'submoduleId'),
 };

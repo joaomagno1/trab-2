@@ -14,17 +14,17 @@ export class ModuleControllerFindOne {
   @HttpCode(HttpStatus.OK)
   @Get(ROUTE.MODULES.FIND_ONE)
   async findOne(
-    @Req() req: Request,
+    @Req() request: Request,
     @Param('moduleId') moduleId: number
   ): Promise<Result<ModuleResponseDto>> {
-    const module = await this.moduleServiceFindOne.findOne(moduleId);
-    const responseDto = ModuleConverterDto.toModuleResponse(module);
+    const foundModule = await this.moduleServiceFindOne.findOne(moduleId);
+    const data = ModuleConverterDto.toModuleResponse(foundModule);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
-      'Módulo encontrado com sucesso!',
-      responseDto,
-      req.path,
+      'Módulo encontrado.',
+      data,
+      request.path,
       null
     );
   }

@@ -1,9 +1,9 @@
 import { createOperationMessage } from "../../constant/mensagem.operacao";
 
-const ENTITY_NAME = "Disciplina";
+const entityName = "Disciplina";
 
 export const DISCIPLINE = {
-  ENTITY: ENTITY_NAME,
+  ENTITY: entityName,
 
   ALIAS: "discipline",
 
@@ -24,33 +24,33 @@ export const DISCIPLINE = {
   },
 
   TITLE: {
-    LIST: `Listagem de ${ENTITY_NAME}s`,
-    CREATE: `Nova ${ENTITY_NAME}`,
-    UPDATE: `Atualizar ${ENTITY_NAME}`,
-    DELETE: `Excluir ${ENTITY_NAME}`,
-    VIEW: `Visualizar ${ENTITY_NAME}`,
+    LIST: `Listagem de ${entityName}s`,
+    CREATE: `Nova ${entityName}`,
+    UPDATE: `Atualizar ${entityName}`,
+    DELETE: `Excluir ${entityName}`,
+    VIEW: `Visualizar ${entityName}`,
   },
 
   INPUT_ERROR: {
     ID: {
-      BLANK: `O código de identificação da ${ENTITY_NAME} deve ser informado`,
-      VALID: `Informe um código de identificação válido para a ${ENTITY_NAME}`,
+      BLANK: `O código de identificação da ${entityName} deve ser informado`,
+      VALID: `Informe um código de identificação válido para a ${entityName}`,
     },
     NAME: {
-      BLANK: `O nome da ${ENTITY_NAME} deve ser informado`,
-      VALID: `Informe um nome válido para a ${ENTITY_NAME}`,
-      MAX_LEN: `O nome da ${ENTITY_NAME} deve ter no máximo 80 caracteres`,
-      MIN_LEN: `O nome da ${ENTITY_NAME} deve ter no mínimo 3 caracteres`,
-      STRING: `O nome da ${ENTITY_NAME} deve ser um texto`,
+      BLANK: `É preciso informar o nome da ${entityName}`,
+      VALID: `Informe um nome válido para a ${entityName}`,
+      MAX_LEN: `O nome da ${entityName} deve ter no máximo 80 caracteres`,
+      MIN_LEN: `O nome da ${entityName} deve ter no mínimo 3 caracteres`,
+      STRING: `O nome da ${entityName} deve ser um texto`,
     },
     DESCRIPTION: {
-        BLANK: `A descrição da ${ENTITY_NAME} deve ser informada`,
-        VALID: `Informe uma descrição válida para a ${ENTITY_NAME}`,
-        MAX_LEN: `A descrição da ${ENTITY_NAME} deve ter no máximo 255 caracteres`,
-        MIN_LEN: `A descrição da ${ENTITY_NAME} deve ter no mínimo 3 caracteres`,
-        STRING: `A descrição da ${ENTITY_NAME} deve ser um texto`,
+        BLANK: `A descrição da ${entityName} é obrigatória`,
+        VALID: `Informe uma descrição válida para a ${entityName}`,
+        MAX_LEN: `A descrição da ${entityName} deve ter no máximo 255 caracteres`,
+        MIN_LEN: `A descrição da ${entityName} deve ter no mínimo 3 caracteres`,
+        STRING: `A descrição da ${entityName} deve ser um texto`,
     }
   },
 
-  OPERATION: createOperationMessage(ENTITY_NAME),
+  OPERATION: createOperationMessage(entityName),
 };

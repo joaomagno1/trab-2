@@ -14,17 +14,17 @@ export class SubmoduleControllerFindOne {
   @HttpCode(HttpStatus.OK)
   @Get(ROUTE.SUBMODULES.FIND_ONE)
   async findOne(
-    @Req() req: Request,
+    @Req() request: Request,
     @Param('submoduleId') submoduleId: number
   ): Promise<Result<SubmoduleResponseDto>> {
-    const submodule = await this.submoduleServiceFindOne.findOne(submoduleId);
-    const responseDto = SubmoduleConverterDto.toSubmoduleResponse(submodule);
+    const foundSubmodule = await this.submoduleServiceFindOne.findOne(submoduleId);
+    const data = SubmoduleConverterDto.toSubmoduleResponse(foundSubmodule);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
-      'Submódulo encontrado com sucesso!',
-      responseDto,
-      req.path,
+      'Submódulo localizado.',
+      data,
+      request.path,
       null
     );
   }

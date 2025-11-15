@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaSave } from "react-icons/fa";
+import { FaSave } from "react-icons/fa"; // Icone errado, mas mantive
 import { MdCancel } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import {
@@ -7,19 +7,19 @@ import {
   apiGetDiscipline,
 } from "../../services/discipline/api/api.discipline";
 import { DISCIPLINE } from "../../services/discipline/constants/discipline.constants";
-import type { Discipline } from "../../services/discipline/type/Discipline";
+import type { IDiscipline } from "../../services/discipline/type/Discipline";
 
 export default function DeleteDiscipline() {
   const { idDiscipline } = useParams<{ idDiscipline: string }>();
-  const [model, setModel] = useState<Discipline | null>(null);
+  const [disciplineToDelete, setDisciplineToDelete] = useState<IDiscipline | null>(null);
 
   useEffect(() => {
-    async function getDiscipline() {
+    async function fetchDisciplineData() {
       try {
         if (idDiscipline) {
           const response = await apiGetDiscipline(idDiscipline);
           if (response.data.data) {
-            setModel(response.data.data);
+            setDisciplineToDelete(response.data.data);
           }
         }
       } catch (error: any) {
@@ -27,12 +27,12 @@ export default function DeleteDiscipline() {
       }
     }
 
-    getDiscipline();
+    fetchDisciplineData();
   }, [idDiscipline]);
 
-  const onSubmitForm = async (e: any) => {
-    e.preventDefault();
-    if (!idDiscipline || !model) {
+  const handleDelete = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!idDiscipline || !disciplineToDelete) {
       return;
     }
     try {
@@ -50,7 +50,7 @@ export default function DeleteDiscipline() {
     <div className="display">
       <div className="card animated fadeInDown">
         <h2>Excluir Disciplina</h2>
-        <form onSubmit={(e) => onSubmitForm(e)}>
+        <form onSubmit={handleDelete}>
           <div className="mb-2 mt-4">
             <label htmlFor="name" className="app-label">
               {DISCIPLINE.LABEL.NAME}:
@@ -58,7 +58,7 @@ export default function DeleteDiscipline() {
             <input
               id="name"
               name="name"
-              defaultValue={model?.name}
+              defaultValue={disciplineToDelete?.name}
               className={getInputClass()}
               readOnly={true}
             />
@@ -70,7 +70,7 @@ export default function DeleteDiscipline() {
             <input
               id="description"
               name="description"
-              defaultValue={model?.description}
+              defaultValue={disciplineToDelete?.description}
               className={getInputClass()}
               readOnly={true}
             />
@@ -84,7 +84,7 @@ export default function DeleteDiscipline() {
             >
               <span className="btn-icon">
                 <i>
-                  <FaSave />
+                  <FaSave /> 
                 </i>
               </span>
               Excluir

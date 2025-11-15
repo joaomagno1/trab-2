@@ -12,6 +12,10 @@ import { SubmoduleServiceFindAll } from './service/submodule.service.findAll';
 import { SubmoduleServiceFindOne } from './service/submodule.service.findOne';
 import { SubmoduleServiceUpdate } from './service/submodule.service.update';
 
+// Esse padrão de separar CADA ação (Create, Delete, Find...)
+// em seu próprio controller e service é o "Feature-Sliced".
+// Dá mais arquivo, mas cada arquivo faz UMA coisa só.
+
 const submoduleControllers = [
   SubmoduleControllerCreate,
   SubmoduleControllerDelete,

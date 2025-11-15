@@ -1,28 +1,31 @@
-import { http } from "../../axios/config.axios";
-import { API_ROUTES } from "../../router/url";
-import type { Discipline } from "../type/Discipline";
+import { apiClient } from "../../axios/config.axios";
+import { API } from "../../router/url"; 
+import type { IDiscipline } from "../type/Discipline"; 
 
 export const apiGetDisciplines = async () => {
-  const response = await http.get(API_ROUTES.DISCIPLINE.LIST);
-  return response;
+  const apiResponse = await apiClient.get(API.DISCIPLINE.LIST);
+  return apiResponse;
 };
 
-export const apiGetDiscipline = async (idDiscipline: string) => {
-  const response = await http.get(`${API_ROUTES.DISCIPLINE.BY_ID}/${idDiscipline}`);
-  return response;
+export const apiGetDiscipline = async (disciplineId: string) => {
+  const apiResponse = await apiClient.get(`${API.DISCIPLINE.BY_ID}/${disciplineId}`);
+  return apiResponse;
 };
 
-export const apiPostDiscipline = async (discipline: Discipline) => {
-  const response = await http.post(API_ROUTES.DISCIPLINE.CREATE, discipline);
+export const apiPostDiscipline = async (data: IDiscipline) => {
+  const apiResponse = await apiClient.post(API.DISCIPLINE.CREATE, data);
+  return apiResponse;
 };
 
-export const apiPutDiscipline = async (idDiscipline: string, discipline: Discipline) => {
-  const response = await http.put(
-    `${API_ROUTES.DISCIPLINE.UPDATE}/${idDiscipline}`,
-    discipline,
+export const apiPutDiscipline = async (disciplineId: string, data: IDiscipline) => {
+  const apiResponse = await apiClient.put(
+    `${API.DISCIPLINE.UPDATE}/${disciplineId}`,
+    data,
   );
+  return apiResponse;
 };
 
-export const apiDeleteDiscipline = async (idDiscipline: string) => {
-  const response = await http.delete(`${API_ROUTES.DISCIPLINE.DELETE}/${idDiscipline}`);
+export const apiDeleteDiscipline = async (disciplineId: string) => {
+  const apiResponse = await apiClient.delete(`${API.DISCIPLINE.DELETE}/${disciplineId}`);
+  return apiResponse;
 };

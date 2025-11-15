@@ -15,18 +15,18 @@ export class ModuleControllerUpdate {
   @HttpCode(HttpStatus.OK)
   @Patch(ROUTE.MODULES.UPDATE)
   async update(
-    @Req() req: Request,
+    @Req() request: Request,
     @Param('moduleId') moduleId: number,
-    @Body() moduleRequest: ModuleRequestDto
+    @Body() updateDto: ModuleRequestDto
   ): Promise<Result<ModuleResponseDto>> {
-    const updatedModule = await this.moduleServiceUpdate.update(moduleId, moduleRequest);
-    const responseDto = ModuleConverterDto.toModuleResponse(updatedModule);
+    const updatedModule = await this.moduleServiceUpdate.update(moduleId, updateDto);
+    const data = ModuleConverterDto.toModuleResponse(updatedModule);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
       'Módulo atualizado com sucesso!',
-      responseDto,
-      req.path,
+      data,
+      request.path,
       null
     );
   }

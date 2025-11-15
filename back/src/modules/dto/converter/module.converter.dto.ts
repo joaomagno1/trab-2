@@ -6,19 +6,20 @@ import { DisciplineEntity } from 'src/discipline/entity/discipline.entity';
 
 export class ModuleConverterDto {
   static toModuleEntity(moduleRequest: ModuleRequestDto): ModuleEntity {
-    const moduleEntity = new ModuleEntity();
+    const newEntity = new ModuleEntity();
 
     if (moduleRequest.moduleId) {
-      moduleEntity.moduleId = moduleRequest.moduleId;
+      newEntity.moduleId = moduleRequest.moduleId;
     }
-    moduleEntity.title = moduleRequest.title;
-    moduleEntity.description = moduleRequest.description;
+    newEntity.title = moduleRequest.title;
+    newEntity.description = moduleRequest.description;
 
-    const discipline = new DisciplineEntity();
-    discipline.disciplineId = moduleRequest.disciplineId;
-    moduleEntity.discipline = discipline;
+    // Anexa a disciplina "pai"
+    const parentDiscipline = new DisciplineEntity();
+    parentDiscipline.disciplineId = moduleRequest.disciplineId;
+    newEntity.discipline = parentDiscipline;
 
-    return moduleEntity;
+    return newEntity;
   }
 
   static toModuleResponse(module: ModuleEntity): ModuleResponseDto {

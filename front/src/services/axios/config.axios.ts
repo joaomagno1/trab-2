@@ -1,8 +1,11 @@
 import axios from "axios";
-import { REST_CONFIG } from "../constant/sistema.constants";
+import { API_CONFIG } from "../constant/sistema.constants"; // Mudei para API_CONFIG
 
-export const http = axios.create({
-  baseURL: REST_CONFIG.BASE_URL,
+//    Criei um cliente "apiClient" do Axios.
+// Todas as chamadas pra API vão usar essa instância.
+// Fica fácil de configurar a baseURL e timeouts.
+export const apiClient = axios.create({
+  baseURL: API_CONFIG.BASE_URL,
   timeout: 15000,
   headers: {
     "Content-type": "application/json",

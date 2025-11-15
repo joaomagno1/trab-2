@@ -10,14 +10,16 @@ export class SubmoduleServiceFindOne {
     private submoduleRepository: Repository<SubmoduleEntity>,
   ) {}
 
-  async findOne(id: number): Promise<SubmoduleEntity> {
-    const submodule = await this.submoduleRepository.findOne({
-      where: { submoduleId: id },
+  async findOne(submoduleId: number): Promise<SubmoduleEntity> {
+    const foundSubmodule = await this.submoduleRepository.findOne({
+      where: { submoduleId: submoduleId },
       relations: ['module'],
     });
-    if (!submodule) {
-      throw new NotFoundException(`Submódulo com ID ${id} não encontrado.`);
+    
+    // Sempre bom checar se o ID existe antes de retornar
+    if (!foundSubmodule) {
+      throw new NotFoundException(`Não foi possível encontrar o submódulo com o ID ${submoduleId}.`);
     }
-    return submodule;
+    return foundSubmodule;
   }
 }

@@ -1,15 +1,16 @@
 import { Response } from 'express';
 import { MessageSystem } from './message.system';
 
-export function sendHttpResponse<T>(
-  res: Response,
+// Função helper pra padronizar o envio da resposta JSON
+export function sendJsonResponse<T>(
+  response: Response,
   status: number,
   message: string | null,
   data: T | null,
   path: string | null,
   error: string | any | null,
 ) {
-  return res
+  return response
     .status(status)
-    .json(MessageSystem.showMessage(status, message, data, path, error));
+    .json(MessageSystem.buildResponse(status, message, data, path, error));
 }

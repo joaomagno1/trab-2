@@ -12,19 +12,18 @@ export class ModuleServiceUpdate {
     private moduleRepository: Repository<ModuleEntity>,
   ) {}
 
-  async update(id: number, moduleRequestDto: ModuleRequestDto): Promise<ModuleEntity> {
-    const moduleToUpdate = ModuleConverterDto.toModuleEntity(moduleRequestDto);
-
-    // The ID from the URL parameter is the source of truth.
-    // Assign it to the entity before preloading.
-    moduleToUpdate.moduleId = id;
+  async update(moduleId: number, updateDto: ModuleRequestDto): Promise<ModuleEntity> {
+    const entityFromDto = ModuleConverterDto.toModuleEntity(updateDto);
     
-    const module = await this.moduleRepository.preload(moduleToUpdate);
+    entityFromDto.moduleId = moduleId;
+    
+    // Usando o preload, o TypeORM busca o módulo e mescla os dados
+    const existingModule = await this.moduleRepository.preload(entityFromDto);
 
-    if (!module) {
-      throw new NotFoundException(`Módulo com ID ${id} não encontrado.`);
+    if (!existingModule) {
+      throw new NotFoundException(`Módulo com ID ${moduleId} não encontrado.`);
     }
 
-    return this.moduleRepository.save(module);
+    return this.moduleRepository.save(existingModule);
   }
 }

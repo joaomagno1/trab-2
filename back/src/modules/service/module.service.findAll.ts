@@ -11,11 +11,13 @@ export class ModuleServiceFindAll {
   ) {}
 
   async findAll(): Promise<ModuleEntity[]> {
-    return await this.moduleRepository.find({
+    // Busca todos os módulos, já trazendo a disciplina (JOIN)
+    const modules = await this.moduleRepository.find({
       relations: ['discipline'],
       order: {
         moduleId: 'ASC'
       }
     });
+    return modules;
   }
 }

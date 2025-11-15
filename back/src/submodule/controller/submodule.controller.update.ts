@@ -15,18 +15,18 @@ export class SubmoduleControllerUpdate {
   @HttpCode(HttpStatus.OK)
   @Patch(ROUTE.SUBMODULES.UPDATE)
   async update(
-    @Req() req: Request,
+    @Req() request: Request,
     @Param('submoduleId') submoduleId: number,
-    @Body() submoduleRequest: SubmoduleRequestDto
+    @Body() updateDto: SubmoduleRequestDto
   ): Promise<Result<SubmoduleResponseDto>> {
-    const updatedSubmodule = await this.submoduleServiceUpdate.update(submoduleId, submoduleRequest);
-    const responseDto = SubmoduleConverterDto.toSubmoduleResponse(updatedSubmodule);
+    const savedSubmodule = await this.submoduleServiceUpdate.update(submoduleId, updateDto);
+    const data = SubmoduleConverterDto.toSubmoduleResponse(savedSubmodule);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
-      'Submódulo atualizado com sucesso!',
-      responseDto,
-      req.path,
+      'Submódulo alterado com sucesso.',
+      data,
+      request.path,
       null
     );
   }

@@ -12,16 +12,15 @@ export class DisciplineControllerFindAll {
 
   @HttpCode(HttpStatus.OK)
   @Get(ROUTE.DISCIPLINE.LIST)
-  async findAll(@Req() req: Request): Promise<Result<DisciplineResponseDto[]>> {
-    const response = await this.disciplineServiceFindAll.findAll();
+  async findAll(@Req() request: Request): Promise<Result<DisciplineResponseDto[]>> {
+    const disciplineList = await this.disciplineServiceFindAll.findAll();
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
       'Listagem de disciplinas!',
-      response,
-      req.path,
+      disciplineList,
+      request.path,
       null
     ) 
   }
-
 }

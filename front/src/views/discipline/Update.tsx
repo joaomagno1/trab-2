@@ -7,19 +7,24 @@ import {
   apiPutDiscipline,
 } from "../../services/discipline/api/api.discipline";
 import { DISCIPLINE } from "../../services/discipline/constants/discipline.constants";
-import type { Discipline } from "../../services/discipline/type/Discipline";
+import type { IDiscipline } from "../../services/discipline/type/Discipline";
 
 export default function UpdateDiscipline() {
+  // Aluno TSI: O useParams() pega o :idDiscipline da URL
+  // que a gente definiu no Router.tsx.
   const { idDiscipline } = useParams<{ idDiscipline: string }>();
-  const [model, setModel] = useState<Discipline | null>(null);
+  const [disciplineData, setDisciplineData] = useState<IDiscipline | null>(null);
 
+  // Aluno TSI: O useEffect() com array de dependência [idDiscipline]
+  // faz com que o 'fetchDiscipline' seja chamado SÓ quando
+  // o componente montar ou quando o idDiscipline mudar.
   useEffect(() => {
-    async function getDiscipline() {
+    async function fetchDiscipline() {
       try {
         if (idDiscipline) {
           const response = await apiGetDiscipline(idDiscipline);
           if (response.data.data) {
-            setModel(response.data.data);
+            setDisciplineData(response.data.data);
           }
         }
       } catch (error: any) {
@@ -27,26 +32,28 @@ export default function UpdateDiscipline() {
       }
     }
 
-    getDiscipline();
+    fetchDiscipline();
   }, [idDiscipline]);
 
-  const handleChangeField = (name: keyof Discipline, value: string) => {
-    setModel((prev) => ({ ...prev, [name]: value }));
+  const handleFieldChange = (name: keyof IDiscipline, value: string) => {
+    setDisciplineData((prev) => ({ ...prev, [name]: value } as IDiscipline));
   };
 
-  const onSubmitForm = async (e: any) => {
-    e.preventDefault();
-    if (!idDiscipline || !model) {
+  const handleFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!idDiscipline || !disciplineData) {
       return;
     }
     try {
-      await apiPutDiscipline(idDiscipline, model);
+      await apiPutDiscipline(idDiscipline, disciplineData);
+      // Faltou o redirect...
     } catch (error: any) {
       console.log(error);
     }
   };
 
   const getInputClass = () => {
+    // A validação de update não foi implementada
     return "form-control app-label mt-2";
   };
 
@@ -54,7 +61,7 @@ export default function UpdateDiscipline() {
     <div className="display">
       <div className="card animated fadeInDown">
         <h2>Atualizar Disciplina</h2>
-        <form onSubmit={(e) => onSubmitForm(e)}>
+        <form onSubmit={handleFormSubmit}>
           <div className="mb-2 mt-4">
             <label htmlFor="name" className="app-label">
               {DISCIPLINE.LABEL.NAME}:
@@ -62,11 +69,11 @@ export default function UpdateDiscipline() {
             <input
               id="name"
               name="name"
-              value={model?.name}
+              value={disciplineData?.name || ''} // Controlado
               className={getInputClass()}
               autoComplete="off"
               onChange={(e) =>
-                handleChangeField(DISCIPLINE.FIELDS.NAME, e.target.value)
+                handleFieldChange(DISCIPLINE.FIELDS.NAME, e.target.value)
               }
             />
           </div>
@@ -77,11 +84,11 @@ export default function UpdateDiscipline() {
             <input
               id="description"
               name="description"
-              value={model?.description}
+              value={disciplineData?.description || ''} // Controlado
               className={getInputClass()}
               autoComplete="off"
               onChange={(e) =>
-                handleChangeField(DISCIPLINE.FIELDS.DESCRIPTION, e.target.value)
+                handleFieldChange(DISCIPLINE.FIELDS.DESCRIPTION, e.target.value)
               }
             />
           </div>

@@ -12,16 +12,16 @@ export class ModuleControllerDelete {
   @HttpCode(HttpStatus.OK)
   @Delete(ROUTE.MODULES.DELETE)
   async remove(
-    @Req() req: Request,
+    @Req() request: Request,
     @Param('moduleId') moduleId: number
   ): Promise<Result<null>> {
     await this.moduleServiceDelete.remove(moduleId);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
-      'Módulo removido com sucesso!',
+      'Módulo removido com sucesso.',
       null,
-      req.path,
+      request.path,
       null
     );
   }

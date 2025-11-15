@@ -1,3 +1,4 @@
+// A interface pro nosso objeto de resposta
 export interface Result<T> {
   status: number;
   timestamp: string;
@@ -7,7 +8,9 @@ export interface Result<T> {
   path: string | null;
 }
 
-export class Message<T> {
+// Renomeei de "Message" para "ApiResponse"
+// Fica mais claro que é uma resposta da API.
+export class ApiResponse<T> {
   status: number = 0;
   message: string | null = null;
   error: string | unknown | null = null;
@@ -29,24 +32,24 @@ export class Message<T> {
   }
 
   toJSON(): Result<T> {
-    const result: Result<T> = {
+    const responsePayload: Result<T> = {
       status: this.status,
-      timestamp: new Date().toISOString().split('T')[0],
+      timestamp: new Date().toISOString().split('T')[0], // Só a data
       path: this.path,
     };
 
     if (this.message !== null && this.message !== undefined) {
-      result.message = this.message;
+      responsePayload.message = this.message;
     }
 
     if (this.data !== null && this.data !== undefined) {
-      result.data = this.data;
+      responsePayload.data = this.data;
     }
 
     if (this.error !== null && this.error !== undefined) {
-      result.error = this.error;
+      responsePayload.error = this.error;
     }
 
-    return result;
+    return responsePayload;
   }
 }

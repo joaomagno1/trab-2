@@ -12,8 +12,8 @@ export class ModuleServiceCreate {
     private moduleRepository: Repository<ModuleEntity>,
   ) {}
 
-  async create(moduleRequestDto: ModuleRequestDto): Promise<ModuleEntity> {
-    const moduleEntity = ModuleConverterDto.toModuleEntity(moduleRequestDto);
-    return await this.moduleRepository.save(moduleEntity);
+  async create(createDto: ModuleRequestDto): Promise<ModuleEntity> {
+    const newModule = ModuleConverterDto.toModuleEntity(createDto);
+    return await this.moduleRepository.save(newModule);
   }
 }

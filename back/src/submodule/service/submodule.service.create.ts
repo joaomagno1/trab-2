@@ -12,8 +12,8 @@ export class SubmoduleServiceCreate {
     private submoduleRepository: Repository<SubmoduleEntity>,
   ) {}
 
-  async create(submoduleRequestDto: SubmoduleRequestDto): Promise<SubmoduleEntity> {
-    const submoduleEntity = SubmoduleConverterDto.toSubmoduleEntity(submoduleRequestDto);
-    return await this.submoduleRepository.save(submoduleEntity);
+  async create(createDto: SubmoduleRequestDto): Promise<SubmoduleEntity> {
+    const newSubmodule = SubmoduleConverterDto.toSubmoduleEntity(createDto);
+    return await this.submoduleRepository.save(newSubmodule);
   }
 }

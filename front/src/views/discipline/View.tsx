@@ -3,19 +3,19 @@ import { MdCancel } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { apiGetDiscipline } from "../../services/discipline/api/api.discipline";
 import { DISCIPLINE } from "../../services/discipline/constants/discipline.constants";
-import type { Discipline } from "../../services/discipline/type/Discipline";
+import type { IDiscipline } from "../../services/discipline/type/Discipline";
 
 export default function ViewDiscipline() {
   const { idDiscipline } = useParams<{ idDiscipline: string }>();
-  const [model, setModel] = useState<Discipline | null>(null);
+  const [discipline, setDiscipline] = useState<IDiscipline | null>(null);
 
   useEffect(() => {
-    async function getDiscipline() {
+    async function loadDisciplineData() {
       try {
         if (idDiscipline) {
           const response = await apiGetDiscipline(idDiscipline);
           if (response.data.data) {
-            setModel(response.data.data);
+            setDiscipline(response.data.data);
           }
         }
       } catch (error: any) {
@@ -23,7 +23,7 @@ export default function ViewDiscipline() {
       }
     }
 
-    getDiscipline();
+    loadDisciplineData();
   }, [idDiscipline]);
 
   const getInputClass = () => {
@@ -42,7 +42,7 @@ export default function ViewDiscipline() {
             <input
               id="name"
               name="name"
-              defaultValue={model?.name}
+              defaultValue={discipline?.name} // defaultValue
               className={getInputClass()}
               readOnly={true}
             />
@@ -54,7 +54,7 @@ export default function ViewDiscipline() {
             <input
               id="description"
               name="description"
-              defaultValue={model?.description}
+              defaultValue={discipline?.description} // defaultValue
               className={getInputClass()}
               readOnly={true}
             />

@@ -1,10 +1,11 @@
-export interface Discipline {
+
+export interface IDiscipline {
   id?: string;
   name?: string;
   description?: string;
 }
 
-export interface DisciplineErrors {
+export interface IDisciplineErrors {
   id?: boolean;
   name?: boolean;
   description?: boolean;

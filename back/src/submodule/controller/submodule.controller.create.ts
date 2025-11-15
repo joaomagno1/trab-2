@@ -15,17 +15,17 @@ export class SubmoduleControllerCreate {
   @HttpCode(HttpStatus.CREATED)
   @Post(ROUTE.SUBMODULES.CREATE)
   async create(
-    @Req() req: Request,
-    @Body() submoduleRequest: SubmoduleRequestDto
+    @Req() request: Request,
+    @Body() createDto: SubmoduleRequestDto
   ): Promise<Result<SubmoduleResponseDto>> {
-    const submoduleEntity = await this.submoduleServiceCreate.create(submoduleRequest);
-    const responseDto = SubmoduleConverterDto.toSubmoduleResponse(submoduleEntity);
+    const savedSubmodule = await this.submoduleServiceCreate.create(createDto);
+    const data = SubmoduleConverterDto.toSubmoduleResponse(savedSubmodule);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.CREATED,
-      'Submódulo cadastrado com sucesso!',
-      responseDto,
-      req.path,
+      'Submódulo criado com sucesso.',
+      data,
+      request.path,
       null
     )
   }

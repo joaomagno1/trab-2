@@ -4,24 +4,33 @@ import { SubmoduleEntity } from 'src/submodule/entity/submodule.entity';
 import { SubmoduleResponseDto } from '../response/submodule.response.dto';
 import { ModuleEntity } from 'src/modules/entity/module.entity';
 
+// Classe "Mapper" ou "Converter"
+// Isso é bom pra separar a lógica de transformar DTO em Entidade.
 export class SubmoduleConverterDto {
+  
+  // Converte o que vem do front (RequestDto) para a Entidade do TypeORM
   static toSubmoduleEntity(submoduleRequest: SubmoduleRequestDto): SubmoduleEntity {
-    const submoduleEntity = new SubmoduleEntity();
+    const newEntity = new SubmoduleEntity();
 
     if (submoduleRequest.submoduleId) {
-      submoduleEntity.submoduleId = submoduleRequest.submoduleId;
+      newEntity.submoduleId = submoduleRequest.submoduleId;
     }
-    submoduleEntity.title = submoduleRequest.title;
-    submoduleEntity.explanation = submoduleRequest.explanation;
+    newEntity.title = submoduleRequest.title;
+    newEntity.explanation = submoduleRequest.explanation;
 
-    const module = new ModuleEntity();
-    module.moduleId = submoduleRequest.moduleId;
-    submoduleEntity.module = module;
+    // Aqui a gente anexa o ID do módulo pra salvar a relação
+    const parentModule = new ModuleEntity();
+    parentModule.moduleId = submoduleRequest.moduleId;
+    newEntity.module = parentModule;
 
-    return submoduleEntity;
+    return newEntity;
   }
 
+  // Converte a Entidade do banco (Entity) para o que vai pro front (ResponseDto)
   static toSubmoduleResponse(submodule: SubmoduleEntity): SubmoduleResponseDto {
+        //O plainToInstance é do class-transformer.
+    // Ele que lê os @Expose() do DTO e filtra os campos.
+    // O excludeExtraneousValues: true é o que faz a "mágica" de filtrar.
     return plainToInstance(SubmoduleResponseDto, submodule, {
       excludeExtraneousValues: true,
     });

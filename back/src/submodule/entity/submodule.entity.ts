@@ -15,11 +15,16 @@ export class SubmoduleEntity {
   @Column({ name: 'TITLE', type: 'varchar2', length: 100 })
   title: string;
 
+  //    Tive que usar 'clob' (Character Large Object) aqui
+  // porque o 'varchar2' do Oracle tem limite de 4000 bytes.
+  // O 'clob' é pra texto longo, tipo o conteúdo da aula.
   @Column({ name: 'EXPLANATION', type: 'clob' })
   explanation: string;
 
+  //    Define a relação Muitos-para-Um.
+  // Vários submódulos (@ManyToOne) pertencem a um Módulo.
   @ManyToOne(() => ModuleEntity, (module) => module.submodules)
-  @JoinColumn({ name: 'MODULE_ID' })
+  @JoinColumn({ name: 'MODULE_ID' }) // Define qual é a coluna da chave estrangeira
   module: ModuleEntity;
 
   constructor(data: Partial<SubmoduleEntity> = {}) {

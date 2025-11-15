@@ -8,12 +8,14 @@ import DeleteDiscipline from "../../views/discipline/Delete";
 import ViewDiscipline from "../../views/discipline/View";
 import { ROUTES } from "./url";
 
-
+// Aqui é o "mapa" do site.
+// Todas as rotas do front-end são definidas aqui.
 export const routes: RouteObject[] = [
   {
     path: "/system",
-    element: <Layout />,
+    element: <Layout />, // O Layout é o elemento "pai"
     children: [
+      // E essas são as "filhas" que aparecem no <Outlet>
       {
         path: "/system/dashboard",
         element: <Dashboard />,
@@ -27,15 +29,15 @@ export const routes: RouteObject[] = [
         element: <CreateDiscipline />,
       },
       {
-        path: `${ROUTES.DISCIPLINE.UPDATE}/:idDiscipline`,
+        path: `${ROUTES.DISCIPLINE.UPDATE}/:idDiscipline`, // Rota com parâmetro
         element: <UpdateDiscipline />,
       },
       {
-        path: `${ROUTES.DISCIPLINE.DELETE}/:idDiscipline`,
+        path: `${ROUTES.DISCIPLINE.DELETE}/:idDiscipline`, // Rota com parâmetro
         element: <DeleteDiscipline />,
       },
       {
-        path: `${ROUTES.DISCIPLINE.BY_ID}/:idDiscipline`,
+        path: `${ROUTES.DISCIPLINE.BY_ID}/:idDiscipline`, // Rota com parâmetro
         element: <ViewDiscipline />,
       },
     ],

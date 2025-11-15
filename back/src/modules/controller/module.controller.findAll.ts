@@ -13,15 +13,15 @@ export class ModuleControllerFindAll {
 
   @HttpCode(HttpStatus.OK)
   @Get(ROUTE.MODULES.LIST)
-  async findAll(@Req() req: Request): Promise<Result<ModuleResponseDto[]>> {
-    const modules = await this.moduleServiceFindAll.findAll();
-    const responseDto = ModuleConverterDto.toListModuleResponse(modules);
+  async findAll(@Req() request: Request): Promise<Result<ModuleResponseDto[]>> {
+    const allModules = await this.moduleServiceFindAll.findAll();
+    const data = ModuleConverterDto.toListModuleResponse(allModules);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
       'Módulos listados com sucesso!',
-      responseDto,
-      req.path,
+      data,
+      request.path,
       null
     );
   }

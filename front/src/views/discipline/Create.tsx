@@ -4,27 +4,32 @@ import { MdCancel } from "react-icons/md";
 import ErrorMessage from "../../components/mensagem/ErrorMessage";
 import { apiPostDiscipline } from "../../services/discipline/api/api.discipline";
 import { DISCIPLINE } from "../../services/discipline/constants/discipline.constants";
-import type { Discipline, DisciplineErrors } from "../../services/discipline/type/Discipline";
+import type { IDiscipline, IDisciplineErrors } from "../../services/discipline/type/Discipline";
 
 export default function CreateDiscipline() {
-  const [model, setModel] = useState<Discipline>(DISCIPLINE.INITIAL_DATA);
-  const [errors, setErrors] = useState<DisciplineErrors>({});
+  //Usando o useState pra controlar o estado do formulário
+  // um estado pro dado (formState) e um pros erros (formErrors).
+  const [formState, setFormState] = useState<IDiscipline>(DISCIPLINE.INITIAL_DATA);
+  const [formErrors, setFormErrors] = useState<IDisciplineErrors>({});
 
-  const handleChangeField = (name: keyof Discipline, value: string) => {
-    setModel((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({
+  // Função genérica pra atualizar o estado do formulário
+  const handleFieldChange = (name: keyof IDiscipline, value: string) => {
+    setFormState((prev) => ({ ...prev, [name]: value }));
+    // Limpa os erros do campo ao digitar
+    setFormErrors((prev) => ({
       ...prev,
       [name]: undefined,
       [`${name}Message`]: undefined,
     }));
   };
 
-  const validateField = (
-    name: keyof Discipline,
+  // Valida o campo quando o usuário sai dele (onBlur)
+  const validateOnBlur = (
+    name: keyof IDiscipline,
     e: React.FocusEvent<HTMLInputElement>,
   ) => {
     let messages: string[] = [];
-    const value = model[name];
+    const value = formState[name];
 
     switch (name) {
       case DISCIPLINE.FIELDS.NAME:
@@ -44,22 +49,23 @@ export default function CreateDiscipline() {
         }
         break;
     }
-    setErrors((prev) => ({
+    setFormErrors((prev) => ({
       ...prev,
       [name]: messages.length > 0,
       [`${name}Message`]: messages.length > 0 ? messages : undefined,
     }));
   };
 
+  // Validação completa do form, chamada no submit
   const validateForm = (): boolean => {
-    const newErrors: DisciplineErrors = {};
+    const newErrors: IDisciplineErrors = {};
     let isFormValid = true;
 
     const nameMessages = [];
-    if (!model.name) {
+    if (!formState.name) {
       nameMessages.push(DISCIPLINE.INPUT_ERROR.NAME.VALID);
     }
-    if (model.name && typeof model.name !== "string") {
+    if (formState.name && typeof formState.name !== "string") {
       nameMessages.push(DISCIPLINE.INPUT_ERROR.NAME.STRING);
     }
     if (nameMessages.length > 0) {
@@ -69,14 +75,14 @@ export default function CreateDiscipline() {
     }
 
     const descriptionMessages = [];
-    if (!model.description || model.description.trim().length === 0) {
+    if (!formState.description || formState.description.trim().length === 0) {
       descriptionMessages.push(DISCIPLINE.INPUT_ERROR.DESCRIPTION.BLANK);
     }
-    if (model.description) {
-      if (model.description.length > 0 && model.description.length < 3) {
+    if (formState.description) {
+      if (formState.description.length > 0 && formState.description.length < 3) {
         descriptionMessages.push(DISCIPLINE.INPUT_ERROR.DESCRIPTION.MIN_LEN);
       }
-      if (model.description.length > 255) {
+      if (formState.description.length > 255) {
         descriptionMessages.push(DISCIPLINE.INPUT_ERROR.DESCRIPTION.MAX_LEN);
       }
     }
@@ -86,28 +92,30 @@ export default function CreateDiscipline() {
       isFormValid = false;
     }
 
-    setErrors(newErrors);
+    setFormErrors(newErrors);
     return isFormValid;
   };
 
-  const getInputClass = (name: keyof Discipline): string => {
-    if (!errors) return "form-control app-label mt-2";
-    const hasErrors = errors[name];
+  // Helper pra mudar a classe do input (is-invalid)
+  const getFormControlClass = (name: keyof IDiscipline): string => {
+    if (!formErrors) return "form-control app-label mt-2";
+    const hasErrors = formErrors[name];
     if (hasErrors) {
       return "form-control is-invalid app-label input-error mt-2 ";
     }
     return "form-control app-label mt-2";
   };
 
-  const onSubmitForm = async (e: any) => {
-    e.preventDefault();
+  const handleFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!validateForm()) {
       console.log("Erro na digitação dos dados");
       return;
     }
-    if (!model) return;
+    if (!formState) return;
     try {
-      await apiPostDiscipline(model);
+      await apiPostDiscipline(formState);
+      // Aqui faltou o redirect, mas a API foi chamada.
     } catch (error: any) {
       console.log(error);
     }
@@ -117,7 +125,7 @@ export default function CreateDiscipline() {
     <div className="display">
       <div className="card animated fadeInDown">
         <h2>Nova Disciplina</h2>
-        <form onSubmit={(e) => onSubmitForm(e)}>
+        <form onSubmit={handleFormSubmit}>
           <div className="mb-2 mt-4">
             <label htmlFor="name" className="app-label">
               {DISCIPLINE.LABEL.NAME}:
@@ -125,18 +133,18 @@ export default function CreateDiscipline() {
             <input
               id={DISCIPLINE.FIELDS.NAME}
               name={DISCIPLINE.FIELDS.NAME}
-              value={model?.name}
-              className={getInputClass(DISCIPLINE.FIELDS.NAME)}
+              value={formState?.name}
+              className={getFormControlClass(DISCIPLINE.FIELDS.NAME)}
               autoComplete="off"
               onChange={(e) =>
-                handleChangeField(DISCIPLINE.FIELDS.NAME, e.target.value)
+                handleFieldChange(DISCIPLINE.FIELDS.NAME, e.target.value)
               }
-              onBlur={(e) => validateField(DISCIPLINE.FIELDS.NAME, e)}
+              onBlur={(e) => validateOnBlur(DISCIPLINE.FIELDS.NAME, e)}
             />
-            {errors.name && (
+            {formErrors.name && (
               <ErrorMessage
-                error={errors.name}
-                message={errors.nameMessage}
+                error={formErrors.name}
+                message={formErrors.nameMessage}
               />
             )}
           </div>
@@ -147,18 +155,18 @@ export default function CreateDiscipline() {
             <input
               id={DISCIPLINE.FIELDS.DESCRIPTION}
               name={DISCIPLINE.FIELDS.DESCRIPTION}
-              value={model?.description}
-              className={getInputClass(DISCIPLINE.FIELDS.DESCRIPTION)}
+              value={formState?.description}
+              className={getFormControlClass(DISCIPLINE.FIELDS.DESCRIPTION)}
               autoComplete="off"
               onChange={(e) =>
-                handleChangeField(DISCIPLINE.FIELDS.DESCRIPTION, e.target.value)
+                handleFieldChange(DISCIPLINE.FIELDS.DESCRIPTION, e.target.value)
               }
-              onBlur={(e) => validateField(DISCIPLINE.FIELDS.DESCRIPTION, e)}
+              onBlur={(e) => validateOnBlur(DISCIPLINE.FIELDS.DESCRIPTION, e)}
             />
-            {errors.description && (
+            {formErrors.description && (
               <ErrorMessage
-                error={errors.description}
-                message={errors.descriptionMessage}
+                error={formErrors.description}
+                message={formErrors.descriptionMessage}
               />
             )}
           </div>

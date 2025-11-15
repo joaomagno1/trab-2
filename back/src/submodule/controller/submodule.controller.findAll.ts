@@ -13,15 +13,15 @@ export class SubmoduleControllerFindAll {
 
   @HttpCode(HttpStatus.OK)
   @Get(ROUTE.SUBMODULES.LIST)
-  async findAll(@Req() req: Request): Promise<Result<SubmoduleResponseDto[]>> {
-    const submodules = await this.submoduleServiceFindAll.findAll();
-    const responseDto = SubmoduleConverterDto.toListSubmoduleResponse(submodules);
+  async findAll(@Req() request: Request): Promise<Result<SubmoduleResponseDto[]>> {
+    const allSubmodules = await this.submoduleServiceFindAll.findAll();
+    const data = SubmoduleConverterDto.toListSubmoduleResponse(allSubmodules);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
-      'Submódulos listados com sucesso!',
-      responseDto,
-      req.path,
+      'Lista de submódulos carregada!',
+      data,
+      request.path,
       null
     );
   }

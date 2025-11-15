@@ -12,21 +12,23 @@ export class DisciplineServiceCreate {
     private readonly disciplineRepository:  Repository<DisciplineEntity>
   ){}
 
-  async create(newDiscipline: DisciplineRequestDto): Promise<DisciplineResponseDto> {
-    let discipline = DisciplineConverterDto.toDiscipline(newDiscipline);
+  async create(dto: DisciplineRequestDto): Promise<DisciplineResponseDto> {
+    let newEntity = DisciplineConverterDto.toDisciplineEntity(dto);
 
-    const hasDiscipline = await this.disciplineRepository.findOne({
+    //    Regra de negócio importante!
+    // Verificar se já existe uma disciplina com esse nome.
+    const existingDiscipline = await this.disciplineRepository.findOne({
       where: {
-        name: discipline.name
+        name: newEntity.name
       }
     });
 
-    if (hasDiscipline) {
+    if (existingDiscipline) {
       throw new HttpException('Disciplina com nome informado já está cadastrada', HttpStatus.BAD_REQUEST);
     }
 
-    discipline = await this.disciplineRepository.save(discipline);
+    newEntity = await this.disciplineRepository.save(newEntity);
 
-    return DisciplineConverterDto.toDisciplineResponse(discipline);
+    return DisciplineConverterDto.toDisciplineResponse(newEntity);
   }
 }

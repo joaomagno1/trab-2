@@ -10,14 +10,15 @@ export class ModuleServiceFindOne {
     private moduleRepository: Repository<ModuleEntity>,
   ) {}
 
-  async findOne(id: number): Promise<ModuleEntity> {
-    const module = await this.moduleRepository.findOne({
-      where: { moduleId: id },
-      relations: ['discipline'],
+  async findOne(moduleId: number): Promise<ModuleEntity> {
+    const foundModule = await this.moduleRepository.findOne({
+      where: { moduleId: moduleId },
+      relations: ['discipline'], // JOIN na disciplina
     });
-    if (!module) {
-      throw new NotFoundException(`Módulo com ID ${id} não encontrado.`);
+    
+    if (!foundModule) {
+      throw new NotFoundException(`Módulo com ID ${moduleId} não encontrado.`);
     }
-    return module;
+    return foundModule;
   }
 }

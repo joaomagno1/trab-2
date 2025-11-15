@@ -10,10 +10,11 @@ export class ModuleServiceDelete {
     private moduleRepository: Repository<ModuleEntity>,
   ) {}
 
-  async remove(id: number): Promise<void> {
-    const result = await this.moduleRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Módulo com ID ${id} não encontrado.`);
+  async remove(moduleId: number): Promise<void> {
+    const deleteResult = await this.moduleRepository.delete(moduleId);
+    
+    if (deleteResult.affected === 0) {
+      throw new NotFoundException(`Módulo com ID ${moduleId} não encontrado.`);
     }
   }
 }

@@ -11,11 +11,15 @@ export class SubmoduleServiceFindAll {
   ) {}
 
   async findAll(): Promise<SubmoduleEntity[]> {
-    return await this.submoduleRepository.find({
+    //   O relations: ['module'] é o que faz o TypeORM
+    // dar o JOIN na tabela de Módulos. Sem isso, o "module"
+    // viria nulo.
+    const submodules = await this.submoduleRepository.find({
       relations: ['module'],
       order: {
         submoduleId: 'ASC'
       }
     });
+    return submodules;
   }
 }

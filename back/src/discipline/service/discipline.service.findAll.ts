@@ -12,12 +12,14 @@ export class DisciplineServiceFindAll {
     private readonly disciplineRepository: Repository<DisciplineEntity>
   ){}
 
+  // Esse service já retorna o DTO, diferente dos outros
   async findAll(): Promise<DisciplineResponseDto[]> {
     const disciplines = await this.disciplineRepository.find({
       order: {
         disciplineId: 'ASC'
       }
     });
+    // Converte a lista de entidades para lista de DTOs
     return DisciplineConverterDto.toListDisciplineResponse(disciplines);
   }
 }

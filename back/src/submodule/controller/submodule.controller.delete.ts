@@ -12,16 +12,16 @@ export class SubmoduleControllerDelete {
   @HttpCode(HttpStatus.OK)
   @Delete(ROUTE.SUBMODULES.DELETE)
   async remove(
-    @Req() req: Request,
+    @Req() request: Request,
     @Param('submoduleId') submoduleId: number
   ): Promise<Result<null>> {
     await this.submoduleServiceDelete.remove(submoduleId);
 
-    return MessageSystem.showMessage(
+    return MessageSystem.buildResponse(
       HttpStatus.OK,
-      'Submódulo removido com sucesso!',
+      'Submódulo excluído.',
       null,
-      req.path,
+      request.path,
       null
     );
   }
